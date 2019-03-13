@@ -4,11 +4,27 @@ const Company = require('../companies/model')
 
 const router = new Router()
 
+// router.get('/customers', (req, res, next) => {
+//   Customer
+//     .findAll()
+//     .then(customers => {
+//       res.send({ customers })
+//     })
+//     .catch(error => next(error))
+// })
+
 router.get('/customers', (req, res, next) => {
-  Customer
-    .findAll()
-    .then(customers => {
-      res.send({ customers })
+  const limit = req.query.limit || 25
+  const offset = req.query.offset || 0
+
+  Promise.all([
+    Customer.count(),
+    Customer.findAll({ limit, offset })
+  ])
+    .then(([total, customers]) => {
+      res.send({
+        customers, total
+      })
     })
     .catch(error => next(error))
 })
