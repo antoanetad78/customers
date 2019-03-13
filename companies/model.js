@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../db')
+const sequalize = require('../db')
 
 const Company = sequalize.define('companies', {
     name:{
